@@ -1,0 +1,46 @@
+﻿@using Schoolio.ViewModels.Teacher
+@model IndexViewModel
+
+@{
+    ViewBag.Title = "Subjects";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <h2>@ViewBag.Title</h2>
+    </div>
+</div>
+<table class="table table-hover table-striped">
+    <thead>
+        <tr>
+            <th>
+                <strong>
+                    #
+                </strong>
+            </th>
+            <th>
+                Subject Name
+            </th>
+            <th>
+                Subject Type
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @{ var i = 0;}
+        @foreach (var item in Model.Subjects)
+        {
+            <tr>
+                <td>
+                    @(i++)
+                </td>
+                <td>
+                    <a href="@Url.Action("Subject", "Teacher", new {id = item.Id})">@Html.DisplayFor(model => item.Name)</a>
+                </td>
+                <td>
+                    <a href="@Url.Action("SubjectType", "Teacher", new {id = item.TypeId})">@Html.DisplayFor(model => item.TypeName)</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
