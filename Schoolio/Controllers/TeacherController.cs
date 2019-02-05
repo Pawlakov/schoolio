@@ -1,5 +1,6 @@
 ﻿namespace Schoolio.Controllers
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Net;
     using System.Web;
@@ -49,17 +50,35 @@
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             var subject = this.context.Subjects.Find(id.Value);
-            var students = subject.
+            if (subject == null)
+            {
+                return this.HttpNotFound();
+            }
+
+            var @class = subject.Class;
+            var classType = @class?.ClassType;
+            var students = @class?.Students?.ToList() ?? new List<Student>();
 
             var viewModel = new SubjectViewModel()
             {
-                Students = subjects.ToList().Select(x => new SubjectListItemViewModel(x))
+                SubjectId = subject.Id,
+                SubjectTypeId = subject.SubjectType.Id,
+                SubjectName = subject.Name,
+                ClassName = classType?.Name ?? "None",
+                Hours = subject.SchedulePositions != null && subject.SchedulePositions.Any() ? subject.SchedulePositions.Select(x => $"{x.Time} ({x.Duration}min)") : new[] { "None" },
+                Students = students.ToList().Select(x => new StudentListItemViewModel(x))
             };
             return this.View(viewModel);
         }
 
         public ActionResult SubjectType(int? id)
+        {
+            return this.View();
+        }
+
+        public ActionResult StudentNotes(int? studentId, int? subjectId)
         {
             return this.View();
         }

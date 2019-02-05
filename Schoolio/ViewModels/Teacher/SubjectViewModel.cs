@@ -4,9 +4,15 @@
 
     public class SubjectViewModel
     {
-        public int Id { get; set; }
+        public int SubjectId { get; set; }
 
         public int SubjectTypeId { get; set; }
+
+        public string SubjectName { get; set; }
+
+        public string ClassName { get; set; }
+
+        public IEnumerable<string> Hours { get; set; }
 
         public IEnumerable<StudentListItemViewModel> Students { get; set; }
     }

@@ -14,6 +14,8 @@
 
         public virtual SubjectType SubjectType { get; set; }
 
+        public virtual Class Class { get; set; }
+
         public virtual ICollection<SchedulePosition> SchedulePositions { get; set; }
 
         public virtual ICollection<Note> Notes { get; set; }

@@ -65,6 +65,7 @@
             modelBuilder.Entity<Class>().HasOptional(x => x.Schedule).WithOptionalPrincipal(x => x.Class);
             modelBuilder.Entity<Class>().HasRequired(x => x.ClassType).WithMany(x => x.Classes);
             modelBuilder.Entity<Class>().HasOptional(x => x.Curator).WithOptionalDependent(x => x.CuratedClass);
+            modelBuilder.Entity<Class>().HasMany(x => x.Subjects).WithOptional(x => x.Class);
 
             modelBuilder.Entity<Teacher>().HasKey(x => x.Id);
             modelBuilder.Entity<Teacher>().HasMany(x => x.TaughtSubjects).WithOptional(x => x.Teacher);

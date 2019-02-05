@@ -185,6 +185,10 @@
     <Compile Include="Migrations\201901121233032_Claims.Designer.cs">
       <DependentUpon>201901121233032_Claims.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201902031231392_AddedClassSubjectsRelationship.cs" />
+    <Compile Include="Migrations\201902031231392_AddedClassSubjectsRelationship.Designer.cs">
+      <DependentUpon>201902031231392_AddedClassSubjectsRelationship.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
     <Compile Include="Models\Claim.cs" />
@@ -281,6 +285,7 @@
     <Content Include="Views\Teacher\Index.cshtml" />
     <Content Include="Views\Teacher\Subject.cshtml" />
     <Content Include="Views\Teacher\SubjectType.cshtml" />
+    <Content Include="Views\Teacher\StudentNotes.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -306,6 +311,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201901121233032_Claims.resx">
       <DependentUpon>201901121233032_Claims.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902031231392_AddedClassSubjectsRelationship.resx">
+      <DependentUpon>201902031231392_AddedClassSubjectsRelationship.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
