@@ -203,7 +203,9 @@
     <Compile Include="Models\Student.cs" />
     <Compile Include="Models\Subject.cs" />
     <Compile Include="Models\SubjectType.cs" />
+    <Compile Include="ViewModels\Teacher\NoteListItemViewModel.cs" />
     <Compile Include="ViewModels\Teacher\StudentListItemViewModel.cs" />
+    <Compile Include="ViewModels\Teacher\StudentNotesViewModel.cs" />
     <Compile Include="ViewModels\Teacher\SubjectViewModel.cs" />
     <Compile Include="Models\Teacher.cs" />
     <Compile Include="ViewModels\Account\ForgotPasswordViewModel.cs" />

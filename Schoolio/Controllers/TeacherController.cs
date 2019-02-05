@@ -80,7 +80,36 @@
 
         public ActionResult StudentNotes(int? studentId, int? subjectId)
         {
-            return this.View();
+            if (!subjectId.HasValue || !studentId.HasValue)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var subject = this.context.Subjects.Find(subjectId.Value);
+            var student = this.context.Students.Find(studentId.Value);
+            if (subject == null || student == null)
+            {
+                return this.HttpNotFound();
+            }
+
+            var notes = student.Notes.Where(x => x.Subject == subject);
+            var viewModel = new StudentNotesViewModel
+            {
+                StudentId = student.Id,
+                StudentName = $"{student.LastName} {student.FirstName}",
+                SubjectId = subject.Id,
+                SubjectName = subject.Name,
+                Notes = notes.Select(x => new NoteListItemViewModel
+                {
+                    NoteId = x.Id,
+                    Value = x.Value,
+                    Comment = x.Comment,
+                    Date = x.Date
+                }),
+                Average = notes.Average(x => x.Value)
+            };
+
+            return this.View(viewModel);
         }
 
         protected override void Dispose(bool disposing)
