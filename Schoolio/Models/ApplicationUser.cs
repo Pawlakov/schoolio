@@ -1,5 +1,6 @@
 ﻿namespace Schoolio.Models
 {
+    using System.Collections.Generic;
     using System.Security.Claims;
     using System.Threading.Tasks;
 
@@ -14,7 +15,7 @@
 
         public virtual Parent AssignedParent { get; set; }
 
-        public virtual ClaimGroup Group { get; set; }
+        public virtual ICollection<ActorType> Types { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {

@@ -1,0 +1,46 @@
+﻿@using Schoolio.ViewModels.Teacher
+@model AddStudentNoteViewModel
+
+@{
+    ViewBag.Title = "Add Student Note";
+}
+
+@using (Html.BeginForm("AddStudentNote", "Teacher", null, FormMethod.Post))
+{
+    <div class="row">
+        <div class="col-md-12">
+            <h2>
+                @ViewBag.Title
+            </h2>
+            <h3>
+                Student: @Model.StudentName
+            </h3>
+            <h3>
+                Subject: @Model.SubjectName
+            </h3>
+        </div>
+    </div>
+    @Html.HiddenFor(model => model.StudentId)
+    @Html.HiddenFor(model => model.SubjectId)
+    <div class="form-horizontal">
+        <div class="form-group">
+            @Html.LabelFor(model => model.Value, new { @class = "control-label col-md-2 required" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.Value, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Value, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Comment, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.Comment, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Comment, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <input type="submit" value="Save" class="btn btn-default"/>
+        </div>
+    </div>
+}

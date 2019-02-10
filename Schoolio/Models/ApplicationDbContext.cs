@@ -11,9 +11,7 @@
         {
         }
 
-        public virtual DbSet<Claim> Claims { get; set; }
-
-        public virtual DbSet<ClaimGroup> ClaimGroups { get; set; }
+        public virtual DbSet<ActorType> ActorTypes { get; set; }
 
         public virtual DbSet<Class> Classes { get; set; }
 
@@ -47,12 +45,9 @@
             modelBuilder.Entity<ApplicationUser>().HasOptional(x => x.AssignedTeacher).WithRequired(x => x.User);
             modelBuilder.Entity<ApplicationUser>().HasOptional(x => x.AssignedParent).WithRequired(x => x.User);
             modelBuilder.Entity<ApplicationUser>().HasOptional(x => x.AssignedStudent).WithRequired(x => x.User);
-            modelBuilder.Entity<ApplicationUser>().HasOptional(x => x.Group).WithMany(x => x.Users);
+            modelBuilder.Entity<ApplicationUser>().HasMany(x => x.Types).WithMany(x => x.Users);
 
-            modelBuilder.Entity<ClaimGroup>().HasKey(x => x.Id);
-            modelBuilder.Entity<ClaimGroup>().HasMany(x => x.Claims).WithMany(x => x.Groups);
-
-            modelBuilder.Entity<Claim>().HasKey(x => x.Id);
+            modelBuilder.Entity<ActorType>().HasKey(x => x.Id);
 
             modelBuilder.Entity<Parent>().HasKey(x => x.Id);
             modelBuilder.Entity<Parent>().HasMany(x => x.Children).WithMany(x => x.Parents);

@@ -1,23 +1,37 @@
 namespace Schoolio.Migrations
 {
-    using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
+    using System.Diagnostics;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<Schoolio.Models.ApplicationDbContext>
+    using Microsoft.AspNet.Identity;
+    using Microsoft.AspNet.Identity.EntityFramework;
+
+    using Schoolio.Models;
+
+    internal sealed class Configuration : DbMigrationsConfiguration<ApplicationDbContext>
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            this.AutomaticMigrationsEnabled = false;
         }
 
-        protected override void Seed(Schoolio.Models.ApplicationDbContext context)
+        protected override void Seed(ApplicationDbContext context)
         {
-            //  This method will be called after migrating to the latest version.
+            var store = new UserStore<ApplicationUser>(context);
+            var manager = new UserManager<ApplicationUser>(store);
+            var userNames = new[] { "student1", "student2", "student3" };
 
-            //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
-            //  to avoid creating duplicate seed data.
+            foreach (var userName in userNames)
+            {
+                if (!context.Users.Any(u => u.UserName == userName))
+                {
+                    manager.Create(new ApplicationUser { UserName = userName }, "testtest");
+                }
+            }
+
+            context.SaveChanges();
         }
     }
 }

@@ -171,6 +171,13 @@
     <Compile Include="App_Start\SmsService.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\RestrictedController.cs" />
+    <Compile Include="Migrations\201902101059490_ChangedRestricitons.cs" />
+    <Compile Include="Migrations\201902101059490_ChangedRestricitons.Designer.cs">
+      <DependentUpon>201902101059490_ChangedRestricitons.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ActorType.cs" />
+    <Compile Include="ViewModels\Teacher\AddStudentNoteViewModel.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\TeacherController.cs" />
@@ -191,11 +198,9 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
-    <Compile Include="Models\Claim.cs" />
-    <Compile Include="Models\ClaimGroup.cs" />
     <Compile Include="Models\Class.cs" />
     <Compile Include="Models\ClassType.cs" />
-    <Compile Include="Models\Enums\ClaimType.cs" />
+    <Compile Include="Models\Enums\ActorTypeEnum.cs" />
     <Compile Include="Models\Note.cs" />
     <Compile Include="Models\Parent.cs" />
     <Compile Include="Models\Schedule.cs" />
@@ -288,6 +293,7 @@
     <Content Include="Views\Teacher\Subject.cshtml" />
     <Content Include="Views\Teacher\SubjectType.cshtml" />
     <Content Include="Views\Teacher\StudentNotes.cshtml" />
+    <Content Include="Views\Teacher\AddStudentNote.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -316,6 +322,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201902031231392_AddedClassSubjectsRelationship.resx">
       <DependentUpon>201902031231392_AddedClassSubjectsRelationship.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902101059490_ChangedRestricitons.resx">
+      <DependentUpon>201902101059490_ChangedRestricitons.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

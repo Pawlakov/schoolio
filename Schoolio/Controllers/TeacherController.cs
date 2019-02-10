@@ -1,36 +1,25 @@
 ﻿namespace Schoolio.Controllers
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Net;
-    using System.Web;
     using System.Web.Mvc;
 
     using Microsoft.AspNet.Identity;
-    using Microsoft.AspNet.Identity.Owin;
 
     using Schoolio.Models;
+    using Schoolio.Models.Enums;
     using Schoolio.ViewModels.Teacher;
 
-    public class TeacherController : Controller
+    public class TeacherController : RestrictedController
     {
         private ApplicationDbContext context = new ApplicationDbContext();
-
-        private ApplicationUserManager userManager;
-
-        private ApplicationUserManager UserManager
+        
+        public TeacherController() : base(ActorTypeEnum.Teacher)
         {
-            get
-            {
-                if (this.userManager == null)
-                {
-                    this.userManager = this.HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-                }
-
-                return this.userManager;
-            }
         }
-
+        
         public ActionResult Index()
         {
             var user = this.UserManager.FindById(this.User.Identity.GetUserId());
@@ -68,7 +57,7 @@
                 SubjectName = subject.Name,
                 ClassName = classType?.Name ?? "None",
                 Hours = subject.SchedulePositions != null && subject.SchedulePositions.Any() ? subject.SchedulePositions.Select(x => $"{x.Time} ({x.Duration}min)") : new[] { "None" },
-                Students = students.ToList().Select(x => new StudentListItemViewModel(x))
+                Students = students.ToList().Select(x => new StudentListItemViewModel(x)).OrderBy(x => x.Name)
             };
             return this.View(viewModel);
         }
@@ -92,7 +81,7 @@
                 return this.HttpNotFound();
             }
 
-            var notes = student.Notes.Where(x => x.Subject == subject);
+            var notes = student.Notes.Where(x => x.Subject == subject).ToList();
             var viewModel = new StudentNotesViewModel
             {
                 StudentId = student.Id,
@@ -106,10 +95,64 @@
                     Comment = x.Comment,
                     Date = x.Date
                 }),
-                Average = notes.Average(x => x.Value)
+                Average = notes.Any() ? notes.Average(x => x.Value) : 0.0f
             };
 
             return this.View(viewModel);
+        }
+        
+        [HttpGet]
+        public ActionResult AddStudentNote(int? studentId, int? subjectId)
+        {
+            if (!subjectId.HasValue || !studentId.HasValue)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var subject = this.context.Subjects.Find(subjectId.Value);
+            var student = this.context.Students.Find(studentId.Value);
+            if (subject == null || student == null)
+            {
+                return this.HttpNotFound();
+            }
+            
+            var viewModel = new AddStudentNoteViewModel
+            {
+                StudentId = student.Id,
+                StudentName = $"{student.LastName} {student.FirstName}",
+                SubjectId = subject.Id,
+                SubjectName = subject.Name
+            };
+
+            return this.View(viewModel);
+        }
+
+        [HttpPost]
+        public ActionResult AddStudentNote(AddStudentNoteViewModel viewModel)
+        {
+            var subject = this.context.Subjects.Find(viewModel.SubjectId);
+            var student = this.context.Students.Find(viewModel.StudentId);
+            if (subject == null || student == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            if (!this.ModelState.IsValid)
+            {
+                viewModel.StudentName = $"{student.LastName} {student.FirstName}";
+                viewModel.SubjectName = subject.Name;
+                return this.View(viewModel);
+            }
+
+            var note = this.context.Notes.Create();
+            note.Value = viewModel.Value;
+            note.Comment = viewModel.Comment;
+            note.Date = DateTime.Now;
+            note.Student = student;
+            note.Subject = subject;
+            this.context.Notes.Add(note);
+            this.context.SaveChanges();
+            return this.RedirectToAction("Subject", "Teacher", new { id = subject.Id });
         }
 
         protected override void Dispose(bool disposing)
@@ -120,12 +163,6 @@
                 {
                     this.context.Dispose();
                     this.context = null;
-                }
-
-                if (this.userManager != null)
-                {
-                    this.userManager.Dispose();
-                    this.userManager = null;
                 }
             }
 

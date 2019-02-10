@@ -1,7 +1,7 @@
 ﻿namespace Schoolio.Models.Enums
 {
-    public enum ClaimType
+    public enum ActorTypeEnum
     {
-        
+        Teacher
     }
 }
