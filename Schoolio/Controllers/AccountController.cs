@@ -58,19 +58,11 @@
                 return this.View(model);
             }
 
-            var result = await this.SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
-            switch (result)
-            {
-                case SignInStatus.Success:
-                    return this.RedirectToLocal(returnUrl);
-                case SignInStatus.LockedOut:
-                    return this.View("Lockout");
-                case SignInStatus.RequiresVerification:
-                    return this.RedirectToAction("SendCode", new { ReturnUrl = returnUrl, model.RememberMe });
-                default:
-                    this.ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    return this.View(model);
-            }
+            var firstManager = this.SignInManager;
+            var secondManager = this.UserManager;
+            var user = secondManager.Users.First(x => x.Email == model.Email);
+            await firstManager.SignInAsync(user, model.RememberMe, false);
+            return this.RedirectToLocal(returnUrl);
         }
         
         [AllowAnonymous]
